@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>mono terminal</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+body{
+    background:#000;
+    color:white;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.terminal{
+    width:340px;
+    background:#111;
+    border-radius:30px;
+    padding:25px;
+    box-shadow:0 0 30px rgba(255,255,255,0.05);
+    border:1px solid #222;
+}
+
+.logo{
+    font-size:32px;
+    font-weight:700;
+    margin-bottom:30px;
+}
+
+.logo span{
+    color:white;
+}
+
+.subtitle{
+    color:#888;
+    margin-bottom:10px;
+    font-size:14px;
+}
+
+.amount{
+    width:100%;
+    background:#1b1b1b;
+    border:none;
+    border-radius:18px;
+    padding:20px;
+    font-size:36px;
+    color:white;
+    outline:none;
+    margin-bottom:25px;
+    text-align:center;
+}
+
+.tap-zone{
+    height:180px;
+    border:2px dashed #444;
+    border-radius:24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    color:#777;
+    margin-bottom:25px;
+    transition:0.3s;
+}
+
+.tap-zone.active{
+    border-color:#00ff88;
+    color:#00ff88;
+    box-shadow:0 0 20px rgba(0,255,136,0.25);
+}
+
+.tap-icon{
+    font-size:52px;
+    margin-bottom:10px;
+}
+
+.pay-btn{
+    width:100%;
+    border:none;
+    background:white;
+    color:black;
+    padding:18px;
+    border-radius:18px;
+    font-size:18px;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.pay-btn:active{
+    transform:scale(0.98);
+}
+
+.status{
+    text-align:center;
+    margin-top:20px;
+    color:#00ff88;
+    font-size:18px;
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="terminal">
+
+    <div class="logo">
+        mono
+    </div>
+
+    <div class="subtitle">
+        Введіть суму
+    </div>
+
+    <input type="number" class="amount" id="amount" placeholder="0 ₴">
+
+    <div class="tap-zone" id="tapZone">
+        <div class="tap-icon">💳</div>
+        <div>Прикладіть картку</div>
+    </div>
+
+    <button class="pay-btn" onclick="pay()">
+        Оплата
+    </button>
+
+    <div class="status" id="status">
+        ✓ Оплата успішна
+    </div>
+
+</div>
+
+<!-- VISA SOUND -->
+<audio id="visaSound">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+function pay(){
+
+    const amount = document.getElementById("amount").value;
+    const tapZone = document.getElementById("tapZone");
+    const status = document.getElementById("status");
+    const sound = document.getElementById("visaSound");
+
+    if(amount === "" || amount <= 0){
+        alert("Введіть суму");
+        return;
+    }
+
+    tapZone.classList.add("active");
+    status.style.display = "none";
+
+    setTimeout(() => {
+
+        sound.play();
+
+        status.innerHTML = "✓ Оплата " + amount + " ₴ успішна";
+        status.style.display = "block";
+
+        navigator.vibrate?.(200);
+
+        tapZone.classList.remove("active");
+
+    }, 1500);
+}
+</script>
+
+</body>
+</html>
